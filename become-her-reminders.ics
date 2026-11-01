@@ -1,0 +1,81 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Become Her//Daily Ritual//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Become Her Daily Ritual
+X-WR-TIMEZONE:America/Chicago
+BEGIN:VTIMEZONE
+TZID:America/Chicago
+BEGIN:STANDARD
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0600
+TZNAME:CST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0500
+TZNAME:CDT
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:become-her-1@donneshia42.github.io
+DTSTAMP:20261101T180000Z
+DTSTART;TZID=America/Chicago:20261102T060000
+DTEND;TZID=America/Chicago:20261102T061500
+RRULE:FREQ=DAILY
+SUMMARY:Become Her: morning questions, affirmations (1 of 3) and gratitude
+DESCRIPTION:Open your dashboard: https://claude.ai/artifact/6XshoMapaC2Uy6ydpeEWnB\n\n1. Answer the four questions: Who do I want to be today? How do I want to feel today? What do I want to give today? What do I want to receive today?\n2. Say this week's affirmations out loud, then tap I said them to log the time.\n3. Log your morning gratitude.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Become Her: morning questions, affirmations (1 of 3) and gratitude
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:become-her-2@donneshia42.github.io
+DTSTAMP:20261101T180000Z
+DTSTART;TZID=America/Chicago:20261102T120000
+DTEND;TZID=America/Chicago:20261102T121000
+RRULE:FREQ=DAILY
+SUMMARY:Become Her: say your affirmations (2 of 3)
+DESCRIPTION:Say this week's affirmations out loud, then log the time: https://claude.ai/artifact/6XshoMapaC2Uy6ydpeEWnB
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Become Her: say your affirmations (2 of 3)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:become-her-3@donneshia42.github.io
+DTSTAMP:20261101T180000Z
+DTSTART;TZID=America/Chicago:20261102T170000
+DTEND;TZID=America/Chicago:20261102T171000
+RRULE:FREQ=DAILY
+SUMMARY:Become Her: say your affirmations (3 of 3)
+DESCRIPTION:Say this week's affirmations out loud, then log the time: https://claude.ai/artifact/6XshoMapaC2Uy6ydpeEWnB
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Become Her: say your affirmations (3 of 3)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:become-her-4@donneshia42.github.io
+DTSTAMP:20261101T180000Z
+DTSTART;TZID=America/Chicago:20261101T210000
+DTEND;TZID=America/Chicago:20261101T211000
+RRULE:FREQ=DAILY
+SUMMARY:Become Her: night gratitude before bed
+DESCRIPTION:Before bed, log what today gave you: https://claude.ai/artifact/6XshoMapaC2Uy6ydpeEWnB\n\nMove this event to whatever time you usually wind down.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Become Her: night gratitude before bed
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
