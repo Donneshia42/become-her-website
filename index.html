@@ -272,7 +272,7 @@ footer{color:var(--ink-2);font-size:.85rem;text-align:center;padding-top:8px}
   const SLOTS=[{id:'am',label:'6:00 AM',h:6,m:0},{id:'noon',label:'12:00 PM',h:12,m:0},{id:'pm',label:'5:00 PM',h:17,m:0}];
   const GRAT_PM={h:21,m:0};
   const DEFAULT_SETS=[
-    ["I am becoming the woman I was created to be.","I move through today with calm, confidence, and grace.","Everything I need is already on its way to me.","I give freely, and I receive with open hands.","I trust myself and I trust my timing."],
+    ["I am powerful.","I am great.","I am worthy.","I can do it.","I will achieve it.","I am successful."],
     ["I am worthy of the life I am building.","My presence is a gift to every room I enter.","I choose peace over pressure.","I attract people and opportunities that honor me.","I am allowed to take up space."],
     ["I am disciplined because I love who I am becoming.","Abundance flows to me easily and often.","I release what is not mine to carry.","I speak to myself with kindness.","Today I show up as her."],
     ["I am safe to be seen.","My dreams are instructions, and I follow them.","I honor my body, my mind, and my spirit.","I am grateful before the miracle arrives.","I am her, already."]
@@ -283,6 +283,8 @@ footer{color:var(--ink-2);font-size:.85rem;text-align:center;padding-top:8px}
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ toast('Could not save in this browser'); } }
   let state=load()||{startDate:dayKey(new Date()),sets:DEFAULT_SETS,days:{}};
   if(!state.sets||!state.sets.length) state.sets=DEFAULT_SETS;
+  const PLACEHOLDER_SET_1="I am becoming the woman I was created to be.";
+  if(state.sets[0]&&state.sets[0][0]===PLACEHOLDER_SET_1){state.sets[0]=DEFAULT_SETS[0];}
   if(!state.days) state.days={};
   if(!state.startDate) state.startDate=dayKey(new Date());
 
