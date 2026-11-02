@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Become Her Daily</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: one calm column, a ritual timeline for the day (6am → noon → 5pm → night), log cards below. */
+:root{
+  --bg:#f3eef3;          /* lavender-grey ground */
+  --surface:#fbf8fb;
+  --surface-2:#ece4ec;
+  --ink:#2b1f33;         /* aubergine ink */
+  --ink-2:#6b5a73;
+  --line:#d9cdd9;
+  --accent:#8c4a6e;      /* deep mulberry */
+  --accent-soft:#f0dfe9;
+  --gold:#b08a3e;
+  --good:#3f7d5a;
+  --good-soft:#dcefe3;
+  --warn:#a3561f;
+  --warn-soft:#f6e4d3;
+  --shadow:0 10px 30px rgba(43,31,51,.08);
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --body:"Jost","Avenir Next","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1521;--surface:#241c2b;--surface-2:#2f2537;--ink:#f1e9f1;--ink-2:#b8a8bd;--line:#43364b;
+    --accent:#d99bbd;--accent-soft:#3b2a38;--gold:#d8b26a;--good:#8fd0a9;--good-soft:#23382c;--warn:#f0b07a;--warn-soft:#3d2a1c;
+    --shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1521;--surface:#241c2b;--surface-2:#2f2537;--ink:#f1e9f1;--ink-2:#b8a8bd;--line:#43364b;
+  --accent:#d99bbd;--accent-soft:#3b2a38;--gold:#d8b26a;--good:#8fd0a9;--good-soft:#23382c;--warn:#f0b07a;--warn-soft:#3d2a1c;
+  --shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-block:0 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.4rem,6vw,3.6rem);font-style:italic}
+h2{font-size:1.9rem}
+h3{font-size:1.25rem}
+p{margin:0}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);font-weight:500}
+.muted{color:var(--ink-2)}
+button{font:inherit;cursor:pointer}
+textarea,input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea{min-height:76px;resize:vertical;line-height:1.5}
+textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:999px;padding:9px 18px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+:root[data-theme="dark"] .btn,[data-theme="dark"] .btn{color:#1b1521}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#1b1521}}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:6px 14px;font-size:.9rem}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* header */
+header.top{padding-block:40px 8px;display:grid;gap:14px}
+.top-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.date{font-family:var(--display);font-size:1.3rem;font-style:italic;color:var(--ink-2)}
+.ritual{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:6px}
+.ritual a{display:grid;gap:6px;text-decoration:none;color:inherit;padding:10px 8px;border-radius:12px;background:var(--surface);border:1px solid var(--line);min-width:0}
+.ritual a .t{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ritual a .n{font-size:.86rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ritual a .dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.ritual a.done .dot{background:var(--good)}
+.ritual a.due .dot{background:var(--warn)}
+.progress{display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .4s}
+@media (max-width:640px){.ritual{grid-template-columns:repeat(3,1fr)}}
+
+/* sections */
+section.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow);display:grid;gap:18px;min-width:0}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 16px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:500;letter-spacing:.03em;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.gold{background:var(--accent-soft);color:var(--accent)}
+
+/* questions */
+.qs{display:grid;gap:16px}
+.q label{display:block;font-family:var(--display);font-size:1.35rem;font-weight:600;margin-bottom:8px}
+.q .ans{font-size:1.05rem;padding:4px 0 0;white-space:pre-wrap}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.note{font-size:.9rem;color:var(--ink-2)}
+
+/* affirmations */
+.aff-list{display:grid;gap:10px;padding:0;margin:0;list-style:none}
+.aff-list li{font-family:var(--display);font-size:1.45rem;font-weight:500;font-style:italic;padding:10px 0 10px 18px;border-left:2px solid var(--gold);line-height:1.3}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.slot{border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:8px;background:var(--bg);min-width:0}
+.slot .when{font-family:var(--display);font-size:1.5rem;font-weight:600}
+.slot.done{border-color:var(--good)}
+.slot.due{border-color:var(--warn)}
+.slot .logged{font-size:.9rem}
+.slot details{font-size:.85rem}
+.slot details summary{cursor:pointer;color:var(--ink-2)}
+.slot .manual{display:flex;gap:6px;margin-top:6px;align-items:center}
+.slot .manual input{width:auto;padding:6px 8px}
+@media (max-width:640px){.slots{grid-template-columns:1fr}}
+.week-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#affEdit textarea{min-height:150px}
+
+/* gratitude */
+.grat{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grat .g{display:grid;gap:10px;min-width:0}
+@media (max-width:640px){.grat{grid-template-columns:1fr}}
+
+/* reminders */
+.rem-list{display:grid;gap:8px;padding:0;margin:0;list-style:none}
+.rem-list li{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.rem-list .time{font-family:var(--display);font-size:1.3rem;font-weight:600;min-width:84px;font-variant-numeric:tabular-nums}
+
+/* history */
+.hist{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
+.hist .d{display:grid;gap:3px;justify-items:center}
+.hist .d .lbl{font-size:.62rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hist .d .cell{width:100%;aspect-ratio:1;max-width:100%;border-radius:4px;background:var(--surface-2)}
+.hist .d.l1 .cell{background:color-mix(in srgb,var(--good) 35%,var(--surface-2))}
+.hist .d.l2 .cell{background:color-mix(in srgb,var(--good) 70%,var(--surface-2))}
+.hist .d.l3 .cell{background:var(--good)}
+.hist .d.today .cell{outline:2px solid var(--gold);outline-offset:1px}
+.entries{display:grid;gap:12px}
+.entry{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px;font-size:.95rem}
+.entry b{font-family:var(--display);font-size:1.15rem}
+.entry .kv{display:grid;grid-template-columns:150px 1fr;gap:4px 12px}
+.entry .kv span:first-child{color:var(--ink-2);font-size:.85rem}
+@media (max-width:640px){.entry .kv{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.toast.show{opacity:1}
+footer{color:var(--ink-2);font-size:.85rem;text-align:center;padding-top:8px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Daily ritual · Central Time</p>
+    <div class="top-row">
+      <h1 id="greeting">Good morning.</h1>
+      <p class="date" id="today"></p>
+    </div>
+    <div class="progress"><div class="bar"><i id="bar"></i></div><span class="muted" id="progressText">0 of 6 done</span></div>
+    <nav class="ritual" id="ritual" aria-label="Today's ritual"></nav>
+  </header>
+
+  <!-- Morning questions -->
+  <section class="card" id="questions">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">6:00 AM · Morning questions</p>
+        <h2>Who am I today?</h2>
+      </div>
+      <span class="pill" id="qPill">Due 6:00 AM</span>
+    </div>
+    <div class="qs" id="qForm">
+      <div class="q"><label for="q1">1. Who do I want to be today?</label><textarea id="q1" placeholder="Name her. How does she carry herself?"></textarea></div>
+      <div class="q"><label for="q2">2. How do I want to feel today?</label><textarea id="q2" placeholder="Pick the feeling and let it lead."></textarea></div>
+      <div class="q"><label for="q3">3. What do I want to give today?</label><textarea id="q3" placeholder="Time, attention, love, a word someone needs."></textarea></div>
+      <div class="q"><label for="q4">4. What do I want to receive today?</label><textarea id="q4" placeholder="Say it plainly. You are allowed to receive."></textarea></div>
+      <div class="actions"><button class="btn" id="saveQ">Save my answers</button><span class="note" id="qNote"></span></div>
+    </div>
+    <div class="qs" id="qView" hidden></div>
+  </section>
+
+  <!-- Affirmations -->
+  <section class="card" id="affirmations">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Say them out loud · 3 times a day</p>
+        <h2>This week's affirmations</h2>
+      </div>
+      <div class="week-meta">
+        <span class="pill gold" id="weekPill">Week 1</span>
+        <span class="pill" id="nextSetPill">New set in 7 days</span>
+      </div>
+    </div>
+    <ul class="aff-list" id="affList"></ul>
+    <div class="actions">
+      <button class="btn ghost small" id="editAff">Edit this week's affirmations</button>
+      <span class="note">Affirmations rotate automatically every 7 days.</span>
+    </div>
+    <div id="affEdit" hidden>
+      <label for="affText" class="note">One affirmation per line.</label>
+      <textarea id="affText"></textarea>
+      <div class="actions" style="margin-top:10px">
+        <button class="btn small" id="saveAff">Save</button>
+        <button class="btn ghost small" id="cancelAff">Cancel</button>
+      </div>
+    </div>
+    <h3>Log each time you say them</h3>
+    <div class="slots" id="slots"></div>
+  </section>
+
+  <!-- Gratitude -->
+  <section class="card" id="gratitude">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Twice a day</p>
+        <h2>Gratitude log</h2>
+      </div>
+      <span class="pill" id="gPill"></span>
+    </div>
+    <div class="grat">
+      <div class="g">
+        <h3>As I wake</h3>
+        <textarea id="gAm" placeholder="Before your feet hit the floor: what are you grateful for?"></textarea>
+        <div class="actions"><button class="btn small" id="saveGAm">Log morning gratitude</button><span class="note" id="gAmNote"></span></div>
+      </div>
+      <div class="g">
+        <h3>Before bed</h3>
+        <textarea id="gPm" placeholder="What did today give you?"></textarea>
+        <div class="actions"><button class="btn small" id="saveGPm">Log night gratitude</button><span class="note" id="gPmNote"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reminders -->
+  <section class="card" id="reminders">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Reminders</p>
+        <h2>Your schedule</h2>
+      </div>
+      <span class="pill" id="notifPill">Browser alerts off</span>
+    </div>
+    <ul class="rem-list">
+      <li><span class="time">6:00 AM</span><span>Morning questions, affirmations round 1, morning gratitude</span></li>
+      <li><span class="time">12:00 PM</span><span>Affirmations round 2</span></li>
+      <li><span class="time">5:00 PM</span><span>Affirmations round 3</span></li>
+      <li><span class="time">9:00 PM</span><span>Night gratitude before bed</span></li>
+    </ul>
+    <div class="actions">
+      <button class="btn small" id="enableNotif">Turn on browser alerts</button>
+      <a class="btn ghost small" href="become-her-reminders.ics">Add all four to my calendar (.ics)</a>
+      <span class="note">The calendar file repeats daily in Central Time with an alert at each time. Browser alerts fire while this page is open in a tab.</span>
+    </div>
+  </section>
+
+  <!-- History -->
+  <section class="card" id="history">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Last 14 days</p>
+        <h2>Your consistency</h2>
+      </div>
+      <span class="pill" id="streakPill"></span>
+    </div>
+    <div class="hist" id="hist"></div>
+    <div class="entries" id="entries"></div>
+    <div class="actions">
+      <button class="btn ghost small" id="copyExport">Copy all entries (JSON)</button>
+      <span class="note">Everything is saved in this browser only.</span>
+    </div>
+  </section>
+
+  <footer>Become Her · one day at a time</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  const KEY='becomeHer.v1';
+  const SLOTS=[{id:'am',label:'6:00 AM',h:6,m:0},{id:'noon',label:'12:00 PM',h:12,m:0},{id:'pm',label:'5:00 PM',h:17,m:0}];
+  const GRAT_PM={h:21,m:0};
+  const DEFAULT_SETS=[
+    ["I am powerful.","I am great.","I am worthy.","I can do it.","I will achieve it.","I am successful."],
+    ["I am worthy of the life I am building.","My presence is a gift to every room I enter.","I choose peace over pressure.","I attract people and opportunities that honor me.","I am allowed to take up space."],
+    ["I am disciplined because I love who I am becoming.","Abundance flows to me easily and often.","I release what is not mine to carry.","I speak to myself with kindness.","Today I show up as her."],
+    ["I am safe to be seen.","My dreams are instructions, and I follow them.","I honor my body, my mind, and my spirit.","I am grateful before the miracle arrives.","I am her, already."]
+  ];
+
+  // ---------- storage ----------
+  function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return JSON.parse(raw);}catch(e){} return null; }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ toast('Could not save in this browser'); } }
+  let state=load()||{startDate:dayKey(new Date()),sets:DEFAULT_SETS,days:{}};
+  if(!state.sets||!state.sets.length) state.sets=DEFAULT_SETS;
+  const PLACEHOLDER_SET_1="I am becoming the woman I was created to be.";
+  if(state.sets[0]&&state.sets[0][0]===PLACEHOLDER_SET_1){state.sets[0]=DEFAULT_SETS[0];}
+  if(!state.days) state.days={};
+  if(!state.startDate) state.startDate=dayKey(new Date());
+
+  // ---------- helpers ----------
+  function pad(n){return String(n).padStart(2,'0');}
+  function dayKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+  function parseKey(k){const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d);}
+  function fmtTime(ts){return new Date(ts).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});}
+  function fmtDate(d){return d.toLocaleDateString([], {weekday:'long',month:'long',day:'numeric'});}
+  function today(){return state.days[dayKey(new Date())] ||= {};}
+  function minutesNow(){const n=new Date();return n.getHours()*60+n.getMinutes();}
+  function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2200);}
+  function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  const $=id=>document.getElementById(id);
+
+  // ---------- week rotation ----------
+  function daysSinceStart(){const a=parseKey(state.startDate),b=parseKey(dayKey(new Date()));return Math.max(0,Math.round((b-a)/86400000));}
+  function weekIndex(){return Math.floor(daysSinceStart()/7);}
+  function currentSet(){return state.sets[weekIndex()%state.sets.length];}
+  function daysToNextSet(){return 7-(daysSinceStart()%7);}
+
+  // ---------- render ----------
+  function renderHeader(){
+    const h=new Date().getHours();
+    $('greeting').textContent=h<12?'Good morning.':h<17?'Good afternoon.':'Good evening.';
+    $('today').textContent=fmtDate(new Date());
+    const t=today();
+    const items=[
+      {n:'Questions',t:'6:00 AM',done:!!t.q,due:minutesNow()>=6*60,href:'#questions'},
+      {n:'Affirm 1',t:'6:00 AM',done:!!(t.aff&&t.aff.am),due:minutesNow()>=6*60,href:'#affirmations'},
+      {n:'Gratitude',t:'Wake',done:!!(t.gAm),due:minutesNow()>=6*60,href:'#gratitude'},
+      {n:'Affirm 2',t:'12:00 PM',done:!!(t.aff&&t.aff.noon),due:minutesNow()>=12*60,href:'#affirmations'},
+      {n:'Affirm 3',t:'5:00 PM',done:!!(t.aff&&t.aff.pm),due:minutesNow()>=17*60,href:'#affirmations'},
+      {n:'Gratitude',t:'Bed',done:!!(t.gPm),due:minutesNow()>=21*60,href:'#gratitude'}
+    ];
+    const done=items.filter(i=>i.done).length;
+    $('bar').style.width=(done/items.length*100)+'%';
+    $('progressText').textContent=done+' of '+items.length+' done';
+    $('ritual').innerHTML=items.map(i=>'<a href="'+i.href+'" class="'+(i.done?'done':i.due?'due':'')+'"><span class="dot"></span><span class="t">'+i.t+'</span><span class="n">'+i.n+'</span></a>').join('');
+  }
+
+  function renderQuestions(){
+    const t=today();
+    if(t.q){
+      $('qForm').hidden=true;$('qView').hidden=false;
+      const labels=['Who do I want to be today?','How do I want to feel today?','What do I want to give today?','What do I want to receive today?'];
+      $('qView').innerHTML=labels.map((l,i)=>'<div class="q"><label>'+(i+1)+'. '+l+'</label><p class="ans">'+esc(t.q['q'+(i+1)]||'—')+'</p></div>').join('')+
+        '<div class="actions"><button class="btn ghost small" id="editQ">Edit answers</button><span class="note">Answered at '+fmtTime(t.q.at)+'</span></div>';
+      $('editQ').onclick=()=>{for(let i=1;i<=4;i++)$('q'+i).value=t.q['q'+i]||'';$('qForm').hidden=false;$('qView').hidden=true;};
+      $('qPill').textContent='Answered '+fmtTime(t.q.at);$('qPill').className='pill good';
+    }else{
+      $('qForm').hidden=false;$('qView').hidden=true;
+      const late=minutesNow()>6*60+30;
+      $('qPill').textContent=late?'Waiting on you':'Due 6:00 AM';$('qPill').className='pill '+(late?'warn':'');
+    }
+  }
+
+  function renderAffirmations(){
+    $('weekPill').textContent='Week '+(weekIndex()+1)+' · set '+((weekIndex()%state.sets.length)+1)+' of '+state.sets.length;
+    const d=daysToNextSet();$('nextSetPill').textContent=d===7?'New set today':'New set in '+d+(d===1?' day':' days');
+    $('affList').innerHTML=currentSet().map(a=>'<li>'+esc(a)+'</li>').join('');
+    const t=today();t.aff ||= {};
+    $('slots').innerHTML=SLOTS.map(s=>{
+      const ts=t.aff[s.id];const due=minutesNow()>=s.h*60+s.m;
+      return '<div class="slot '+(ts?'done':due?'due':'')+'" id="slot-'+s.id+'">'+
+        '<span class="eyebrow">Round '+(SLOTS.indexOf(s)+1)+'</span><span class="when">'+s.label+'</span>'+
+        (ts?'<span class="pill good">Said at '+fmtTime(ts)+'</span><button class="btn ghost small" data-undo="'+s.id+'">Undo</button>'
+           :'<button class="btn small" data-log="'+s.id+'">I said them</button>'+
+            '<details><summary>Said them earlier? Log the time</summary><div class="manual"><input type="time" id="manual-'+s.id+'" aria-label="Time said"><button class="btn ghost small" data-manual="'+s.id+'">Log</button></div></details>')+
+        '</div>';
+    }).join('');
+    $('slots').querySelectorAll('[data-log]').forEach(b=>b.onclick=()=>{today().aff[b.dataset.log]=Date.now();save();renderAll();toast('Logged · '+fmtTime(Date.now()));});
+    $('slots').querySelectorAll('[data-undo]').forEach(b=>b.onclick=()=>{delete today().aff[b.dataset.undo];save();renderAll();});
+    $('slots').querySelectorAll('[data-manual]').forEach(b=>b.onclick=()=>{
+      const v=$('manual-'+b.dataset.manual).value;if(!v){toast('Pick a time first');return;}
+      const [h,m]=v.split(':').map(Number);const d=new Date();d.setHours(h,m,0,0);
+      today().aff[b.dataset.manual]=d.getTime();save();renderAll();toast('Logged · '+fmtTime(d));
+    });
+  }
+
+  function renderGratitude(){
+    const t=today();
+    if(t.gAm){$('gAm').value=t.gAm.text;$('gAmNote').textContent='Logged at '+fmtTime(t.gAm.at);$('saveGAm').textContent='Update';}
+    else{$('gAmNote').textContent='';$('saveGAm').textContent='Log morning gratitude';}
+    if(t.gPm){$('gPm').value=t.gPm.text;$('gPmNote').textContent='Logged at '+fmtTime(t.gPm.at);$('saveGPm').textContent='Update';}
+    else{$('gPmNote').textContent='';$('saveGPm').textContent='Log night gratitude';}
+    const n=(t.gAm?1:0)+(t.gPm?1:0);
+    $('gPill').textContent=n===2?'Both logged':n===1?'1 of 2 logged':'Morning + night';$('gPill').className='pill '+(n===2?'good':'');
+  }
+
+  function dayScore(k){const d=state.days[k]||{};let n=0;if(d.q)n++;if(d.aff){n+=['am','noon','pm'].filter(s=>d.aff[s]).length;}if(d.gAm)n++;if(d.gPm)n++;return n;}
+  function renderHistory(){
+    const keys=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);keys.push(dayKey(d));}
+    const tk=dayKey(new Date());
+    $('hist').innerHTML=keys.map(k=>{const s=dayScore(k);const lvl=s===0?0:s<3?1:s<6?2:3;return '<div class="d l'+lvl+(k===tk?' today':'')+'" title="'+k+': '+s+' of 6"><div class="cell"></div><span class="lbl">'+Number(k.slice(-2))+'</span></div>';}).join('');
+    let streak=0;for(let i=0;i<365;i++){const d=new Date();d.setDate(d.getDate()-i);const k=dayKey(d);if(dayScore(k)>0)streak++;else if(i>0)break;}
+    $('streakPill').textContent=streak+(streak===1?' day':' days')+' showing up';$('streakPill').className='pill '+(streak>0?'good':'');
+    const past=Object.keys(state.days).filter(k=>k!==tk).sort().reverse().slice(0,7);
+    $('entries').innerHTML=past.map(k=>{const d=state.days[k];const aff=['am','noon','pm'].map((s,i)=>d.aff&&d.aff[s]?SLOTS[i].label.replace(':00','')+' ✓ '+fmtTime(d.aff[s]):SLOTS[i].label.replace(':00','')+' —').join(' · ');
+      return '<div class="entry"><b>'+fmtDate(parseKey(k))+'</b><div class="kv">'+
+        (d.q?'<span>Who I wanted to be</span><span>'+esc(d.q.q1||'')+'</span><span>How I wanted to feel</span><span>'+esc(d.q.q2||'')+'</span><span>What I gave</span><span>'+esc(d.q.q3||'')+'</span><span>What I received</span><span>'+esc(d.q.q4||'')+'</span>':'<span>Questions</span><span class="muted">Not answered</span>')+
+        '<span>Affirmations</span><span>'+aff+'</span>'+
+        '<span>Morning gratitude</span><span>'+(d.gAm?esc(d.gAm.text):'<span class="muted">—</span>')+'</span>'+
+        '<span>Night gratitude</span><span>'+(d.gPm?esc(d.gPm.text):'<span class="muted">—</span>')+'</span>'+
+        '</div></div>';}).join('')||'<p class="note">Past days will appear here after your first full day.</p>';
+  }
+
+  function renderAll(){renderHeader();renderQuestions();renderAffirmations();renderGratitude();renderHistory();}
+
+  // ---------- actions ----------
+  $('saveQ').onclick=()=>{const q={at:Date.now()};let any=false;for(let i=1;i<=4;i++){q['q'+i]=$('q'+i).value.trim();if(q['q'+i])any=true;}
+    if(!any){toast('Write at least one answer');return;}today().q=q;save();renderAll();toast('Saved. Go be her.');};
+  $('saveGAm').onclick=()=>{const v=$('gAm').value.trim();if(!v){toast('Write something you are grateful for');return;}today().gAm={text:v,at:Date.now()};save();renderAll();toast('Morning gratitude logged');};
+  $('saveGPm').onclick=()=>{const v=$('gPm').value.trim();if(!v){toast('Write something you are grateful for');return;}today().gPm={text:v,at:Date.now()};save();renderAll();toast('Night gratitude logged. Rest well.');};
+  $('editAff').onclick=()=>{$('affText').value=currentSet().join('\n');$('affEdit').hidden=false;};
+  $('cancelAff').onclick=()=>{$('affEdit').hidden=true;};
+  $('saveAff').onclick=()=>{const lines=$('affText').value.split('\n').map(s=>s.trim()).filter(Boolean);if(!lines.length){toast('Add at least one affirmation');return;}
+    state.sets[weekIndex()%state.sets.length]=lines;save();$('affEdit').hidden=true;renderAll();toast('Affirmations updated');};
+  $('copyExport').onclick=()=>{const txt=JSON.stringify(state,null,2);
+    const fallback=()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied');}catch(e){toast('Select and copy manually');}document.body.removeChild(ta);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Copied to clipboard'),fallback);}else fallback();};
+
+  // ---------- browser notifications (while the tab is open) ----------
+  function notifState(){if(!('Notification' in window))return 'unsupported';return Notification.permission;}
+  function renderNotif(){const s=notifState();const p=$('notifPill');
+    if(s==='granted'){p.textContent='Browser alerts on';p.className='pill good';$('enableNotif').hidden=true;}
+    else if(s==='unsupported'||s==='denied'){p.textContent=s==='denied'?'Alerts blocked in browser':'Alerts not supported here';p.className='pill warn';$('enableNotif').hidden=true;}
+    else{p.textContent='Browser alerts off';p.className='pill';$('enableNotif').hidden=false;}}
+  $('enableNotif').onclick=()=>{if(!('Notification' in window))return;Notification.requestPermission().then(()=>{renderNotif();if(Notification.permission==='granted')toast('Alerts on while this tab stays open');});};
+  let lastFired='';
+  function tick(){
+    const n=new Date();const hm=pad(n.getHours())+':'+pad(n.getMinutes());const key=dayKey(n)+' '+hm;
+    if(key===lastFired)return;
+    if(notifState()==='granted'){
+      const t=today();
+      const fire=(title,body)=>{try{new Notification(title,{body});}catch(e){}};
+      SLOTS.forEach(s=>{if(hm===pad(s.h)+':'+pad(s.m)&&!(t.aff&&t.aff[s.id]))fire('Time to say your affirmations',s.label+' round. Say them out loud, then log the time.');});
+      if(hm==='06:00'){if(!t.q)fire('Your four morning questions are waiting','Who do I want to be today?');if(!t.gAm)fire('Morning gratitude','Log what you are grateful for as you wake.');}
+      if(hm===pad(GRAT_PM.h)+':'+pad(GRAT_PM.m)&&!t.gPm)fire('Night gratitude','Before bed: what did today give you?');
+      lastFired=key;
+    }
+    // refresh due states as the day moves
+    renderHeader();
+  }
+  setInterval(tick,20000);
+
+  renderAll();renderNotif();
+  if(window.claude&&window.claude.hot&&window.claude.hot.ready){window.claude.hot.ready(()=>{});}
+})();
+</script>
+</body>
+</html>
